@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты - ИнвестПро</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #3498db;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 150px 0 100px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Contacts Section */
+        .contacts {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2rem;
+            color: #2c3e50;
+        }
+
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .contact-info {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .contact-info h3 {
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+            font-size: 1.5rem;
+        }
+
+        .address {
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .address p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Employee Cards */
+        .employees-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .employee-card {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .employee-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .employee-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .employee-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+
+        .employee-position {
+            color: #666;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .employee-email {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+
+        .employee-email:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .contacts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">ИнвестПро</a>
+                <div class="nav-links">
+                    <a href="index.html#about">О компании</a>
+                    <a href="index.html#metrics">Показатели</a>
+                    <a href="index.html#reports">Отчётность</a>
+                    <a href="contacts.html">Контакты</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Наши контакты</h1>
+            <p>Напишите нам, чтобы получить консультацию, обсудить инвестиционные возможности или запросить индивидуальное предложение.</p>
+        </div>
+    </section>
+
+    <!-- Contacts Section -->
+    <section class="contacts">
+        <div class="container">
+            <h2 class="section-title">Ключевые сотрудники</h2>
+            <div class="employees-grid">
+                <div class="employee-card">
+                    <div class="employee-photo">АК</div>
+                    <div class="employee-name">Андрей Котов</div>
+                    <div class="employee-position">Директор по инвестициям</div>
+                    <a href="mailto:boss@investpro.local" class="employee-email">boss@investpro.local</a>
+                </div>
+                
+                <div class="employee-card">
+                    <div class="employee-photo">МЛ</div>
+                    <div class="employee-name">Мария Лебедева</div>
+                    <div class="employee-position">Менеджер проектов</div>
+                    <a href="mailto:m.lebedeva@investpro.local" class="employee-email">m.lebedeva@investpro.local</a>
+                </div>
+                
+                <div class="employee-card">
+                    <div class="employee-photo">ИС</div>
+                    <div class="employee-name">Игорь Соловьёв</div>
+                    <div class="employee-position">Старший аналитик</div>
+                    <a href="mailto:i.soloviev@investpro.local" class="employee-email">i.soloviev@investpro.local</a>
+                </div>
+            </div>
+            
+            <div class="contacts-grid" style="margin-top: 4rem;">
+                <div class="contact-info">
+                    <h3>Адрес компании</h3>
+                    <div class="address">
+                        <p><strong>Офис в Москве</strong></p>
+                        <p>ул. Рублёвая, 123</p>
+                        <p>Москва, 123456</p>
+                        <p>Россия</p>
+                    </div>
+                    
+                    <div class="contact-details">
+                        <p><strong>Телефон:</strong> +7 (495) 123-45-67</p>
+                        <p><strong>Часы работы:</strong> Пн-Пт, 9:00-18:00</p>
+                    </div>
+                </div>
+                
+                <div class="contact-info">
+                    <h3>Техническая поддержка</h3>
+                    <div class="employee-card" style="box-shadow: none; padding: 0; text-align: left; background: none;">
+                        <div class="employee-name">Алексей Роутов</div>
+                        <div class="employee-position">Системный администратор</div>
+                        <p style="margin-top: 1rem;"><strong>Телефон:</strong> +7 (495) 123-45-67 (доб. 100)</p>
+                        <p><strong>Email:</strong> <a href="mailto:admin@investpro.local">admin@investpro.local</a></p>
+                        <p style="margin-top: 1rem;">Ответственный за поддержку сайта, обслуживание серверов и сетей компании.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 ООО "ИнвестПро". Все права защищены.</p>
+        </div>
+    </footer>
+</body>
+</html>

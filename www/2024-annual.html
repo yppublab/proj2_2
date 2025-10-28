@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ИнвестПро - Годовой отчет 2024</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #3498db;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 150px 0 100px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Content Sections */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2rem;
+            color: #2c3e50;
+        }
+
+        /* Metrics */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .metric-card {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Tables */
+        .table-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* Chart Section */
+        .chart-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin: 2rem 0;
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .chart-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 8px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">ИнвестПро</div>
+                <div class="nav-links">
+                    <a href="index.html#about">О компании</a>
+                    <a href="index.html#metrics">Показатели</a>
+                    <a href="index.html#reports">Отчётность</a>
+                    <a href="contacts.html">Контакты</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Годовой отчёт 2024</h1>
+            <p>Итоги успешного года и стратегические перспективы</p>
+        </div>
+    </section>
+
+    <!-- Year Summary -->
+    <section>
+        <div class="container">
+            <div class="highlight">
+                <h2 style="margin-bottom: 1rem;">Рекордный год для ИнвестПро</h2>
+                <p style="font-size: 1.2rem;">Рост выручки на 22.1% и чистой прибыли на 31.9%</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Metrics -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">Ключевые показатели года</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">5,800</div>
+                    <p>Выручка, млн руб.</p>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">910</div>
+                    <p>Чистая прибыль, млн руб.</p>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">15.7%</div>
+                    <p>Рентабельность</p>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">+22.1%</div>
+                    <p>Рост выручки</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Financial Summary -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">Финансовая отчётность</h2>
+            
+            <div class="table-container">
+                <h3>Ключевые финансовые показатели за год</h3>
+                <table>
+                    <tr>
+                        <th>Показатель</th>
+                        <th>2024</th>
+                        <th>2023</th>
+                        <th>Изменение</th>
+                    </tr>
+                    <tr>
+                        <td>Выручка, млн руб.</td>
+                        <td>5,800</td>
+                        <td>4,750</td>
+                        <td>+22.1%</td>
+                    </tr>
+                    <tr>
+                        <td>Чистая прибыль, млн руб.</td>
+                        <td>910</td>
+                        <td>690</td>
+                        <td>+31.9%</td>
+                    </tr>
+                    <tr>
+                        <td>EBITDA, млн руб.</td>
+                        <td>1,470</td>
+                        <td>1,150</td>
+                        <td>+27.8%</td>
+                    </tr>
+                    <tr>
+                        <td>Рентабельность по чистой прибыли</td>
+                        <td>15.7%</td>
+                        <td>14.5%</td>
+                        <td>+1.2 п.п.</td>
+                    </tr>
+                    <tr>
+                        <td>Активы, млн руб.</td>
+                        <td>8,500</td>
+                        <td>6,900</td>
+                        <td>+23.2%</td>
+                    </tr>
+                    <tr>
+                        <td>Собственный капитал, млн руб.</td>
+                        <td>4,200</td>
+                        <td>3,400</td>
+                        <td>+23.5%</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="table-container">
+                <h3>Поквартальная динамика</h3>
+                <table>
+                    <tr>
+                        <th>Показатель</th>
+                        <th>1 кв.</th>
+                        <th>2 кв.</th>
+                        <th>3 кв.</th>
+                        <th>4 кв.</th>
+                    </tr>
+                    <tr>
+                        <td>Выручка, млн руб.</td>
+                        <td>1,250</td>
+                        <td>1,380</td>
+                        <td>1,520</td>
+                        <td>1,650</td>
+                    </tr>
+                    <tr>
+                        <td>Чистая прибыль, млн руб.</td>
+                        <td>185</td>
+                        <td>210</td>
+                        <td>240</td>
+                        <td>275</td>
+                    </tr>
+                    <tr>
+                        <td>Рентабельность, %</td>
+                        <td>14.8%</td>
+                        <td>15.2%</td>
+                        <td>15.8%</td>
+                        <td>16.7%</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Charts Section -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">Визуализация годовых результатов</h2>
+            
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3 class="chart-title">Динамика выручки и прибыли за 2024 год</h3>
+                </div>
+                <canvas id="revenueProfitChart"></canvas>
+            </div>
+
+            <div class="chart-grid">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Сравнение с 2023 годом</h3>
+                    </div>
+                    <canvas id="yearComparisonChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Структура выручки по сегментам</h3>
+                    </div>
+                    <canvas id="segmentsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Segment Performance -->
+    <section>
+        <div class="container">
+            <div class="table-container">
+                <h3>Результаты по сегментам бизнеса за год</h3>
+                <table>
+                    <tr>
+                        <th>Сегмент</th>
+                        <th>Выручка, млн руб.</th>
+                        <th>Доля в выручке</th>
+                        <th>Операционная прибыль, млн руб.</th>
+                        <th>Маржа, %</th>
+                    </tr>
+                    <tr>
+                        <td>Инвестиционный банкинг</td>
+                        <td>2,020</td>
+                        <td>34.8%</td>
+                        <td>580</td>
+                        <td>28.7%</td>
+                    </tr>
+                    <tr>
+                        <td>Управление активами</td>
+                        <td>2,410</td>
+                        <td>41.6%</td>
+                        <td>745</td>
+                        <td>30.9%</td>
+                    </tr>
+                    <tr>
+                        <td>Консалтинг</td>
+                        <td>1,370</td>
+                        <td>23.6%</td>
+                        <td>320</td>
+                        <td>23.4%</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Strategic Initiatives -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">Стратегические достижения 2024</h2>
+            
+            <div class="chart-grid">
+                <div class="table-container">
+                    <h3>Ключевые инициативы</h3>
+                    <ul style="list-style: none; padding-left: 0;">
+                        <li style="padding: 10px 0; border-bottom: 1px solid #f0f0f0;">✓ Запуск цифровой платформы для инвестирования</li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid #f0f0f0;">✓ Расширение международного присутствия</li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid #f0f0f0;">✓ Внедрение AI-технологий в аналитические процессы</li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid #f0f0f0;">✓ Укрепление команды за счет привлечения топ-менеджеров</li>
+                        <li style="padding: 10px 0;">✓ Развитие ESG-направления</li>
+                    </ul>
+                </div>
+                
+                <div class="table-container">
+                    <h3>Дивидендная политика</h3>
+                    <div style="text-align: center; padding: 2rem;">
+                        <div class="metric-value">350</div>
+                        <p>млн руб. рекомендовано к выплате</p>
+                        <p style="margin-top: 1rem;">38.5% от чистой прибыли</p>
+                        <p>Дивидендная доходность: 4.2%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Outlook -->
+    <section>
+        <div class="container">
+            <div class="table-container">
+                <h3>Прогнозы на 2025 год</h3>
+                <p style="padding: 15px; background: #f8f9fa; border-radius: 5px; font-size: 1.1rem;">
+                    В 2025 году компания планирует продолжить стратегию роста с фокусом на цифровизацию 
+                    и международную экспансию. Ожидается рост выручки на 20-25% и увеличение рентабельности 
+                    до 16-17%. Основные инвестиции будут направлены на развитие технологической платформы 
+                    и расширение продуктовой линейки.
+                </p>
+                
+                <div class="metrics-grid" style="margin-top: 2rem;">
+                    <div class="metric-card">
+                        <div class="metric-value">20-25%</div>
+                        <p>Ожидаемый рост выручки</p>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">16-17%</div>
+                        <p>Целевая рентабельность</p>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">30+</div>
+                        <p>Новые продукты</p>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">3</div>
+                        <p>Новые страны присутствия</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 ООО "ИнвестПро". Все права защищены.</p>
+            <p>Информация предоставлена для ознакомления и не является инвестиционной рекомендацией.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Revenue and Profit Chart
+        const revenueProfitCtx = document.getElementById('revenueProfitChart').getContext('2d');
+        const revenueProfitChart = new Chart(revenueProfitCtx, {
+            type: 'line',
+            data: {
+                labels: ['1 кв.', '2 кв.', '3 кв.', '4 кв.'],
+                datasets: [
+                    {
+                        label: 'Выручка (млн руб.)',
+                        data: [1250, 1380, 1520, 1650],
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Чистая прибыль (млн руб.)',
+                        data: [185, 210, 240, 275],
+                        borderColor: 'rgba(46, 204, 113, 1)',
+                        backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        titleColor: '#2c3e50',
+                        bodyColor: '#2c3e50',
+                        borderColor: '#3498db',
+                        borderWidth: 1
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Выручка (млн руб.)',
+                            color: '#3498db'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Прибыль (млн руб.)',
+                            color: '#2ecc71'
+                        },
+                        grid: {
+                            drawOnChartArea: false,
+                        }
+                    }
+                }
+            }
+        });
+
+        // Year Comparison Chart
+        const yearComparisonCtx = document.getElementById('yearComparisonChart').getContext('2d');
+        const yearComparisonChart = new Chart(yearComparisonCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Выручка', 'Чистая прибыль', 'EBITDA', 'Активы'],
+                datasets: [{
+                    label: '2023',
+                    data: [4750, 690, 1150, 6900],
+                    backgroundColor: 'rgba(52, 152, 219, 0.6)'
+                }, {
+                    label: '2024',
+                    data: [5800, 910, 1470, 8500],
+                    backgroundColor: 'rgba(46, 204, 113, 0.6)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'млн руб.'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Segments Chart
+        const segmentsCtx = document.getElementById('segmentsChart').getContext('2d');
+        const segmentsChart = new Chart(segmentsCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Инвестиционный банкинг', 'Управление активами', 'Консалтинг'],
+                datasets: [{
+                    data: [2020, 2410, 1370],
+                    backgroundColor: [
+                        'rgba(52, 152, 219, 0.8)',
+                        'rgba(46, 204, 113, 0.8)',
+                        'rgba(155, 89, 182, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(52, 152, 219, 1)',
+                        'rgba(46, 204, 113, 1)',
+                        'rgba(155, 89, 182, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

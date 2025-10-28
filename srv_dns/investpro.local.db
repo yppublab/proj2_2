@@ -1,0 +1,16 @@
+$ORIGIN investpro.local.
+$TTL 300
+@   IN SOA ns.investpro.local. admin.investpro.local. (
+        2025091001 ; Serial
+        3600       ; Refresh
+        900        ; Retry
+        604800     ; Expire
+        300 )      ; Minimum
+
+; NS
+@         IN NS ns.investpro.local.
+
+; APEX and hosts
+@         IN A 192.168.70.10
+ns        IN A 192.168.50.70
+mail      IN A 192.168.70.20

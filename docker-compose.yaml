@@ -1,0 +1,356 @@
+services:
+  nat:
+    hostname: nat
+    build: ./nat
+    container_name: nat
+    cap_add: ["NET_ADMIN"]
+    restart: unless-stopped
+    networks:
+      uplink:
+      nat_net:
+        ipv4_address: 192.168.90.254
+    volumes:
+      - ./nat/iptables.rules:/etc/iptables/rules.v4:ro
+    extra_hosts: ["host.docker.internal:host-gateway"]
+    ports:
+      - "127.0.0.1:80:80" # srv_web
+      - "127.0.0.1:25:25" # srv_mail
+      - "127.0.0.1:143:143" # srv_mail
+      - "127.0.0.1:13389:13389" # user_boss
+      - "127.0.0.1:23389:23389" # admin
+      - "127.0.0.1:2222:2222" # admin
+
+  fw:
+    hostname: fw
+    depends_on:
+      - nat
+    build: ./fw
+    container_name: fw
+    privileged: true
+    cap_add: ["NET_ADMIN"]
+    restart: unless-stopped
+    sysctls:
+      net.ipv4.ip_forward: 1
+    networks:
+      nat_net:
+        ipv4_address: 192.168.90.2
+      servers_net:
+        ipv4_address: 192.168.50.254
+      users_net:
+        ipv4_address: 192.168.0.254
+      dmz_net:
+        ipv4_address: 192.168.70.254
+      mng_net:
+        ipv4_address: 192.168.10.254
+    volumes:
+      # Адрес srv_dns
+      - ./fw/etc/resolv.conf:/etc/resolv.conf:ro
+      - ./fw/nftables.conf:/etc/nftables.conf:rw
+      - ./adm.sh:/usr/local/bin/adm.sh:rw
+    environment:
+      - ADM_HASH=${ADM_HASH}
+
+  srv_dns:
+    hostname: srv-dns
+    depends_on:
+      - fw
+    build: ./srv_dns
+    container_name: srv_dns
+    cap_add: ["NET_ADMIN"]
+    restart: unless-stopped
+    networks:
+      servers_net:
+        ipv4_address: 192.168.50.70
+    volumes:
+      - ./srv_dns/Corefile:/etc/coredns/Corefile:ro
+      - ./srv_dns/investpro.local.db:/etc/coredns/investpro.local.db:ro
+      - ./adm.sh:/usr/local/bin/adm.sh:rw
+    environment:
+      - GATEWAY_IP=192.168.50.254
+      - ADM_HASH=${ADM_HASH}
+    expose:
+      - "53"
+      - "53/udp"
+
+  srv_waf:
+    hostname: srv-waf
+    build: srv_waf
+    depends_on:
+      - fw
+      - srv_dns
+    container_name: srv_waf
+    cap_add: ["NET_ADMIN"]
+    restart: unless-stopped
+    networks:
+      dmz_net:
+        ipv4_address: 192.168.70.5
+    volumes:
+      - ./adm.sh:/usr/local/bin/adm.sh:rw
+    environment:
+      - GATEWAY_IP=192.168.70.254
+      - ADM_HASH=${ADM_HASH}
+      - USER1_HASH=${USER1_HASH}
+    dns: [192.168.50.70]
+
+  srv_web:
+    hostname: srv-web
+    build: srv_web
+    depends_on:
+      - fw
+      - srv_dns
+    container_name: srv_web
+    cap_add: ["NET_ADMIN"]
+    restart: unless-stopped
+    networks:
+      dmz_net:
+        ipv4_address: 192.168.70.10
+    volumes:
+      - ./www:/usr/share/nginx/html:ro
+      - ./srv_web/log.conf:/etc/nginx/http.d/zz-server.conf:rw
+      - ./srv_web/nginx.conf:/etc/nginx/nginx.conf:rw
+      - ./srv_web/access.log:/access.log:ro
+      - ./adm.sh:/usr/local/bin/adm.sh:rw
+    environment:
+      - GATEWAY_IP=192.168.70.254
+      - ADM_HASH=${ADM_HASH}
+      - USER1_HASH=${USER1_HASH}
+    dns: [192.168.50.70]
+
+  srv_fs:
+    hostname: srv-fs
+    depends_on:
+      - fw
+    build: ./srv_fs
+    container_name: srv_fs
+    cap_add: ["NET_ADMIN"]
+    restart: unless-stopped
+    # user: root
+    networks:
+      servers_net:
+        ipv4_address: 192.168.50.30
+    volumes:
+      - ./samba/share:/share
+      - ./adm.sh:/usr/local/bin/adm.sh:rw
+      - ./srv_fs/etc/samba/smb.conf:/etc/samba/smb.conf:rw
+    environment:
+      - GATEWAY_IP=192.168.50.254
+      - ADM_HASH=${ADM_HASH}
+      - SAMBA_USER=${SAMBA_USER}
+      - SAMBA_PASSWORD=${SAMBA_PASSWORD}
+      - SAMBA_SHARE_NAME=${SAMBA_SHARE_NAME}
+    dns: [192.168.50.70]
+
+  srv_mail:
+    depends_on:
+      - fw
+      - srv_dns
+    build: ./srv_mail
+    container_name: srv_mail
+    hostname: srv-mail
+    domainname: investpro.local
+    shm_size: "256m"
+    restart: unless-stopped
+    cap_add: ["NET_ADMIN"]
+    networks:
+      dmz_net:
+        ipv4_address: 192.168.70.20
+    # no host port publishing; access via fw DNAT1832
+    environment:
+      # hostname/FQDN
+      - DMS_HELO_NAME=mail.investpro.local
+      # enable core filtering stack
+      - ENABLE_RSPAMD=1
+      - ENABLE_CLAMAV=1
+      - ENABLE_POSTSCREEN=0
+      - POSTSCREEN_ACTION=ignore
+      - ENABLE_DNSBL=0
+      - PERMIT_DOCKER=connected-networks
+      # DKIM auto-generation for investpro.local
+      - ENABLE_OPENDKIM=1
+      - DKIM_AUTOGENERATE=1
+      - DKIM_SELECTOR=mail
+      # IMAP/POP internal only (no host port publishing)
+      - ENABLE_IMAP=1
+      - ENABLE_POP3=1
+      # disable TLS (lab only) see postfix/dovecot overrides in config
+      - SSL_TYPE=manual
+      - SSL_CERT_PATH=/tmp/docker-mailserver/ssl/cert.pem
+      - SSL_KEY_PATH=/tmp/docker-mailserver/ssl/key.pem
+      # envs
+      - GATEWAY_IP=192.168.70.254
+      - ADM_HASH=${ADM_HASH}
+      - RSPAMD_PASSWORD=${RSPAMD_PASSWORD}
+    volumes:
+      - ./srv_mail/config/:/tmp/docker-mailserver/
+      - ./adm.sh:/usr/local/bin/adm.sh:rw
+    dns: [192.168.50.70]
+
+  srv_trueconf:
+    container_name: srv-trueconf
+    depends_on:
+      - fw
+      - srv_dns
+    cap_add: ["NET_ADMIN"]
+    restart: unless-stopped
+    build: ./srv_trueconf
+    networks:
+      servers_net:
+        ipv4_address: 192.168.50.50
+    environment:
+      - ADMIN_USER=${TRUECONF_USER}
+      - ADMIN_PASSWORD=${TRUECONF_PASSWORD}
+      - GATEWAY_IP=192.168.50.254
+      - ADM_HASH=${ADM_HASH}
+    volumes:
+      # - ./srv_trueconf/lib:/opt/trueconf/server/var/lib
+      - ./srv_trueconf/setup.d:/setup.d
+      - ./adm.sh:/usr/local/bin/adm.sh:rw
+    dns: [192.168.50.70]
+
+  user-go-boss:
+    hostname: user-go-boss
+    depends_on: [ fw, srv_fs, srv_mail]
+    build: ./user_boss
+    container_name: user-go-boss
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+    devices:
+      - /dev/fuse
+    security_opt:
+      - apparmor:unconfined
+    restart: unless-stopped
+    networks:
+      users_net:
+        ipv4_address: 192.168.0.2
+    volumes:
+      - ./adm.sh:/usr/local/bin/adm.sh:rw
+    environment:
+      - GATEWAY_IP=192.168.0.254
+      - ADM_HASH=${ADM_HASH}
+      - BOSS_HASH=${BOSS_HASH}
+      - SAMBA_USER=${SAMBA_USER}
+      - SAMBA_PASSWORD=${SAMBA_PASSWORD}
+    dns: [192.168.50.70]
+    privileged: true
+
+  user-go-lebed:
+    hostname: user-go-lebed
+    depends_on: [fw]
+    build: ./empty
+    container_name: user-go-lebed
+    cap_add: ["NET_ADMIN"]
+    restart: unless-stopped
+    networks:
+      users_net:
+        ipv4_address: 192.168.0.10
+    environment:
+      - GATEWAY_IP=192.168.0.254
+      - ADM_HASH=${ADM_HASH}
+      - USER1_HASH=${USER1_HASH}
+      - USERNAME=m.lebedeva
+    volumes:
+      - ./adm.sh:/usr/local/bin/adm.sh:rw
+    dns: [192.168.50.70]
+
+  user-go-solov:
+    hostname: user-go-solov
+    depends_on: [fw]
+    build: ./empty
+    container_name: user-go-solov
+    cap_add: ["NET_ADMIN"]
+    restart: unless-stopped
+    networks:
+      users_net:
+        ipv4_address: 192.168.0.20
+    environment:
+      - GATEWAY_IP=192.168.0.254
+      - ADM_HASH=${ADM_HASH}
+      - USER2_HASH=${USER2_HASH}
+      - USERNAME=i.soloviev
+    volumes:
+      - ./adm.sh:/usr/local/bin/adm.sh:rw
+    dns: [192.168.50.70]
+
+  admin-go-pc:
+    hostname: admin-go-pc
+    depends_on: [ fw, srv_fs, srv_mail]
+    build: ./admin
+    container_name: admin-go-pc
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+    devices:
+      - /dev/fuse
+    security_opt:
+      - apparmor:unconfined
+    restart: unless-stopped
+    networks:
+      mng_net:
+        ipv4_address: 192.168.10.50
+    volumes:
+      - ./adm.sh:/usr/local/bin/adm.sh:rw
+    environment:
+      - GATEWAY_IP=192.168.10.254
+      - ADM_HASH=${ADM_HASH}
+      - ADMIN_HASH=${ADMIN_HASH}
+      - SAMBA_USER=${SAMBA_USER}
+      - SAMBA_PASSWORD=${SAMBA_PASSWORD}
+    dns: [192.168.50.70]
+    privileged: true
+
+networks:
+  uplink:
+    name: uplink
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24
+    driver_opts:
+      com.docker.network.bridge.enable_icc: "true"
+      com.docker.network.bridge.name: br-uplink
+  nat_net:
+    driver: bridge
+    name: nat_net
+    ipam:
+      config:
+        - subnet: 192.168.90.0/24
+    driver_opts:
+      com.docker.network.bridge.enable_icc: "true"
+      com.docker.network.bridge.name: br-nat
+  servers_net:
+    driver: bridge
+    name: servers_net
+    ipam:
+      config:
+        - subnet: 192.168.50.0/24
+    driver_opts:
+      com.docker.network.bridge.enable_icc: "true"
+      com.docker.network.bridge.name: br-servers
+  users_net:
+    driver: bridge
+    name: users_net
+    ipam:
+      config:
+        - subnet: 192.168.0.0/24
+    driver_opts:
+      com.docker.network.bridge.enable_icc: "true"
+      com.docker.network.bridge.name: br-users
+  dmz_net:
+    driver: bridge
+    name: dmz_net
+    ipam:
+      config:
+        - subnet: 192.168.70.0/24
+    driver_opts:
+      com.docker.network.bridge.enable_icc: "true"
+      com.docker.network.bridge.name: br-dmz
+  mng_net:
+    driver: bridge
+    name: mng_net
+    ipam:
+      config:
+        - subnet: 192.168.10.0/24
+    driver_opts:
+      com.docker.network.bridge.enable_icc: "true"
+      com.docker.network.bridge.name: br-mng

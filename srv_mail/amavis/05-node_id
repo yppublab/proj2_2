@@ -1,0 +1,6 @@
+use strict;
+
+# Force FQDN for amavisd node identification
+$myhostname = "mail.investpro.local";
+
+1;  # ensure a defined return
