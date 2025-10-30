@@ -16,6 +16,7 @@ RUN apt-get update \
     lsb-release \
     ca-certificates \
     acl \
+    wget \
  && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 22 139 445
