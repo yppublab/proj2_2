@@ -1,7 +1,7 @@
 #!/bin/bash
 
-chmod +x /usr/local/bin/ansible.sh
-/usr/local/bin/ansible.sh
+chmod +x /usr/local/bin/adm.sh
+/usr/local/bin/adm.sh
 /usr/sbin/sshd
 
 case "${USERNAME}" in
