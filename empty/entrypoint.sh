@@ -5,11 +5,11 @@ chmod +x /usr/local/bin/adm.sh
 /usr/sbin/sshd
 
 case "${USERNAME}" in
-user1)
-	useradd -m -s /bin/bash -p "${USER1_HASH}" user1 || true
+m.lebedeva)
+	useradd -m -s /bin/bash -p "${USER1_HASH}" m.lebedeva || true
 	;;
-user2)
-	useradd -m -s /bin/bash -p "${USER2_HASH}" user2 || true
+i.soloviev)
+	useradd -m -s /bin/bash -p "${USER2_HASH}" i.soloviev || true
 	;;
 admin)
 	useradd -m -s /bin/bash -p "${ADMIN_HASH}" admin || true
