@@ -1,0 +1,54 @@
+{
+  "id": "prometheus_exporter",
+  "name": "Prometheus exporter",
+  "description": "Prometheus exporter for BunkerWeb internal metrics.",
+  "version": "0.27",
+  "stream": "no",
+  "settings": {
+    "USE_PROMETHEUS_EXPORTER": {
+      "context": "global",
+      "default": "no",
+      "help": "Enable the Prometheus export.",
+      "id": "use-prometheus-exporter",
+      "label": "Enable Prometheus exporter",
+      "regex": "^(no|yes)$",
+      "type": "check"
+    },
+    "PROMETHEUS_EXPORTER_IP": {
+      "context": "global",
+      "default": "0.0.0.0",
+      "help": "Listening IP of the Prometheus exporter.",
+      "id": "prometheus-exporter-ip",
+      "label": "Prometheus exporter IP",
+      "regex": "^.*$",
+      "type": "text"
+    },
+    "PROMETHEUS_EXPORTER_PORT": {
+      "context": "global",
+      "default": "9113",
+      "help": "Listening port of the Prometheus exporter.",
+      "id": "prometheus-exporter-port",
+      "label": "Prometheus exporter port",
+      "regex": "^.*$",
+      "type": "text"
+    },
+    "PROMETHEUS_EXPORTER_URL": {
+      "context": "global",
+      "default": "/metrics",
+      "help": "HTTP URL of the Prometheus exporter.",
+      "id": "prometheus-exporter-url",
+      "label": "Prometheus exporter URL",
+      "regex": "^\\/[\\w\\].~:\\/?#\\[@!$\\&'\\(\\)*+,;=\\-]*$",
+      "type": "text"
+    },
+    "PROMETHEUS_EXPORTER_ALLOW_IP": {
+      "context": "global",
+      "default": "127.0.0.0/8 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16",
+      "help": "List of IP/networks allowed to contact the Prometheus exporter endpoint.",
+      "id": "prometheus-exporter-allow-ip",
+      "label": "Prometheus exporter allow IP/networks",
+      "regex": "^(?! )( *(((\\b25[0-5]|\\b2[0-4]\\d|\\b[01]?\\d\\d?)(\\.(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)){3})(\\/([1-2][0-9]?|3[0-2]?|[04-9]))?|(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]Z{0,4}){0,4}%[0-9a-zA-Z]+|::(ffff(:0{1,4})?:)?((25[0-5]|(2[0-4]|1?\\d)?\\d)\\.){3}(25[0-5]|(2[0-4]|1?\\d)?\\d)|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1?\\d)?\\d)\\.){3}(25[0-5]|(2[0-4]|1?\\d)?\\d))(\\/(12[0-8]|1[01][0-9]|[0-9][0-9]?))?)(?!.*\\D\\2([^\\d\\/]|$)) *)*$",
+      "type": "text"
+    }
+  }
+}

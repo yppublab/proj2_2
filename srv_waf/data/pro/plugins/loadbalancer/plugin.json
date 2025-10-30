@@ -1,0 +1,210 @@
+{
+  "id": "loadbalancer",
+  "name": "Load Balancer",
+  "description": "Provides load balancing feature to group of upstreams with optional healthchecks.",
+  "version": "0.27",
+  "stream": "no",
+  "settings": {
+    "LOADBALANCER_HEALTHCHECK_DICT_SIZE": {
+      "context": "global",
+      "default": "10m",
+      "help": "Shared dict size (datastore for all healthchecks).",
+      "id": "loadbalancer-healthcheck-dict-size",
+      "label": "Healthcheck shared dict size",
+      "regex": "^\\d+[kKmMgG]?$",
+      "type": "text"
+    },
+    "LOADBALANCER_UPSTREAM_NAME": {
+      "context": "global",
+      "default": "",
+      "help": "Name of the upstream (used in REVERSE_PROXY_HOST).",
+      "id": "loadbalancer-upstream-name",
+      "label": "Upstream name",
+      "regex": "^[a-zA-Z0-9-_]*$",
+      "type": "text",
+      "multiple": "load-balancer"
+    },
+    "LOADBALANCER_UPSTREAM_SERVERS": {
+      "context": "global",
+      "default": "",
+      "help": "List of servers/IPs in the server group.",
+      "id": "loadbalancer-upstream-servers",
+      "label": "Upstream servers",
+      "regex": "^.*$",
+      "type": "text",
+      "multiple": "load-balancer"
+    },
+    "LOADBALANCER_UPSTREAM_MODE": {
+      "context": "global",
+      "default": "round-robin",
+      "help": "Load balancing mode (round-robin or sticky).",
+      "id": "loadbalancer-upstream-mode",
+      "label": "Upstream load balancing mode",
+      "regex": "^(round\\-robin|sticky)$",
+      "type": "select",
+      "select": [
+        "round-robin",
+        "sticky"
+      ],
+      "multiple": "load-balancer"
+    },
+    "LOADBALANCER_UPSTREAM_STICKY_METHOD": {
+      "context": "global",
+      "default": "ip",
+      "help": "Sticky session method (ip or cookie).",
+      "id": "loadbalancer-upstream-sticky-method",
+      "label": "Sticky method",
+      "regex": "^(ip|cookie)$",
+      "type": "select",
+      "select": [
+        "ip",
+        "cookie"
+      ],
+      "multiple": "load-balancer"
+    },
+    "LOADBALANCER_UPSTREAM_RESOLVE": {
+      "context": "global",
+      "default": "no",
+      "help": "Dynamically resolve upstream hostnames.",
+      "id": "loadbalancer-upstream-resolve",
+      "label": "Upstream resolve",
+      "regex": "^(yes|no)$",
+      "type": "check",
+      "multiple": "load-balancer"
+    },
+    "LOADBALANCER_UPSTREAM_KEEPALIVE": {
+      "context": "global",
+      "default": "",
+      "help": "Number of keepalive connections to cache per worker.",
+      "id": "loadbalancer-upstream-keepalive",
+      "label": "Upstream keepalive connections",
+      "regex": "^\\d*$",
+      "type": "text",
+      "multiple": "load-balancer"
+    },
+    "LOADBALANCER_UPSTREAM_KEEPALIVE_TIMEOUT": {
+      "context": "global",
+      "default": "60s",
+      "help": "Keepalive timeout for upstream connections.",
+      "id": "loadbalancer-upstream-keepalive-timeout",
+      "label": "Upstream keepalive timeout",
+      "regex": "^\\d+[smh]$",
+      "type": "text",
+      "multiple": "load-balancer"
+    },
+    "LOADBALANCER_UPSTREAM_KEEPALIVE_TIME": {
+      "context": "global",
+      "default": "1h",
+      "help": "Keepalive time for upstream connections.",
+      "id": "loadbalancer-upstream-keepalive-time",
+      "label": "Upstream keepalive time",
+      "regex": "^\\d+[smh]$",
+      "type": "text",
+      "multiple": "load-balancer"
+    },
+    "LOADBALANCER_HEALTHCHECK_URL": {
+      "context": "global",
+      "default": "/status",
+      "help": "The healthcheck URL.",
+      "id": "loadbalancer-healthcheck-url",
+      "label": "Healthcheck URL",
+      "regex": "^/.*$",
+      "type": "text",
+      "multiple": "load-balancer"
+    },
+    "LOADBALANCER_HEALTHCHECK_INTERVAL": {
+      "context": "global",
+      "default": "2000",
+      "help": "Healthcheck interval in milliseconds.",
+      "id": "loadbalancer-healthcheck-interval",
+      "label": "Healthcheck interval (ms)",
+      "regex": "^\\d+$",
+      "type": "text",
+      "multiple": "load-balancer"
+    },
+    "LOADBALANCER_HEALTHCHECK_TIMEOUT": {
+      "context": "global",
+      "default": "1000",
+      "help": "Healthcheck timeout in milliseconds.",
+      "id": "loadbalancer-healthcheck-timeout",
+      "label": "Healthcheck timeout (ms)",
+      "regex": "^\\d+$",
+      "type": "text",
+      "multiple": "load-balancer"
+    },
+    "LOADBALANCER_HEALTHCHECK_FALL": {
+      "context": "global",
+      "default": "3",
+      "help": "Number of failed healthchecks before marking the server as down.",
+      "id": "loadbalancer-healthcheck-fall",
+      "label": "Healthcheck fall threshold",
+      "regex": "^\\d+$",
+      "type": "text",
+      "multiple": "load-balancer"
+    },
+    "LOADBALANCER_HEALTHCHECK_RISE": {
+      "context": "global",
+      "default": "1",
+      "help": "Number of successful healthchecks before marking the server as up.",
+      "id": "loadbalancer-healthcheck-rise",
+      "label": "Healthcheck rise threshold",
+      "regex": "^\\d+$",
+      "type": "text",
+      "multiple": "load-balancer"
+    },
+    "LOADBALANCER_HEALTHCHECK_VALID_STATUSES": {
+      "context": "global",
+      "default": "200",
+      "help": "HTTP status considered valid in healthchecks.",
+      "id": "loadbalancer-healthcheck-valid-status",
+      "label": "Valid healthcheck HTTP statuses",
+      "regex": "^[1-5]\\d{2}$",
+      "type": "text",
+      "multiple": "load-balancer"
+    },
+    "LOADBALANCER_HEALTHCHECK_CONCURRENCY": {
+      "context": "global",
+      "default": "10",
+      "help": "Maximum number of concurrent healthchecks.",
+      "id": "loadbalancer-healthcheck-concurrency",
+      "label": "Healthcheck concurrency",
+      "regex": "^\\d+$",
+      "type": "text",
+      "multiple": "load-balancer"
+    },
+    "LOADBALANCER_HEALTHCHECK_TYPE": {
+      "context": "global",
+      "default": "http",
+      "help": "Type of healthcheck (http or https).",
+      "id": "loadbalancer-healthcheck-type",
+      "label": "Healthcheck type",
+      "regex": "^(http|https)$",
+      "type": "select",
+      "select": [
+        "http",
+        "https"
+      ],
+      "multiple": "load-balancer"
+    },
+    "LOADBALANCER_HEALTHCHECK_SSL_VERIFY": {
+      "context": "global",
+      "default": "yes",
+      "help": "Verify SSL certificate in healthchecks.",
+      "id": "loadbalancer-healthcheck-ssl-verify",
+      "label": "Healthcheck SSL verify",
+      "regex": "^(yes|no)$",
+      "type": "check",
+      "multiple": "load-balancer"
+    },
+    "LOADBALANCER_HEALTHCHECK_HOST": {
+      "context": "global",
+      "default": "",
+      "help": "Host header for healthchecks (useful for HTTPS).",
+      "id": "loadbalancer-healthcheck-host",
+      "label": "Healthcheck host header",
+      "regex": "^.*$",
+      "type": "text",
+      "multiple": "load-balancer"
+    }
+  }
+}

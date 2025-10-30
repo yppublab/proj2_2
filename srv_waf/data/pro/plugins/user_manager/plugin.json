@@ -1,0 +1,18 @@
+{
+  "id": "user_manager",
+  "name": "User Manager",
+  "description": "Add the possibility to manage users on the web interface",
+  "version": "0.27",
+  "stream": "no",
+  "settings": {
+    "USERS_REQUIRE_2FA": {
+      "context": "global",
+      "default": "no",
+      "help": "Require two-factor authentication for all users",
+      "id": "users-require-2fa",
+      "label": "All users require 2FA",
+      "regex": "^(no|yes)$",
+      "type": "check"
+    }
+  }
+}

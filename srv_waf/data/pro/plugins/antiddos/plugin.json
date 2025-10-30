@@ -1,0 +1,63 @@
+{
+  "id": "antiddos",
+  "name": "Anti DDoS",
+  "description": "Provides enhanced protection against DDoS attacks by analyzing and filtering suspicious traffic.",
+  "version": "0.27",
+  "stream": "no",
+  "settings": {
+    "USE_ANTIDDOS": {
+      "context": "global",
+      "default": "no",
+      "help": "Enable or disable anti DDoS protection to mitigate high traffic spikes.",
+      "id": "use-antiddos",
+      "label": "Enable anti DDoS",
+      "regex": "^(no|yes)$",
+      "type": "check"
+    },
+    "ANTIDDOS_METRICS_DICT_SIZE": {
+      "context": "global",
+      "default": "10M",
+      "help": "Size of in-memory storage for DDoS metrics (e.g., 10M, 500k).",
+      "id": "antiddos-metrics-dict-size",
+      "label": "Anti DDoS metrics dict size",
+      "regex": "^\\d+[kKmMgG]?$",
+      "type": "text"
+    },
+    "ANTIDDOS_THRESHOLD": {
+      "context": "global",
+      "default": "100",
+      "help": "Maximum suspicious requests allowed from a single IP before blocking.",
+      "id": "antiddos-threshold",
+      "label": "Anti DDoS threshold number",
+      "regex": "^\\d+$",
+      "type": "text"
+    },
+    "ANTIDDOS_WINDOW_TIME": {
+      "context": "global",
+      "default": "10",
+      "help": "Time window (seconds) to detect abnormal request patterns.",
+      "id": "antiddos-window-time",
+      "label": "Anti DDoS window time",
+      "regex": "^\\d+$",
+      "type": "text"
+    },
+    "ANTIDDOS_STATUS_CODES": {
+      "context": "global",
+      "default": "429 403 444",
+      "help": "HTTP status codes treated as suspicious for DDoS analysis.",
+      "id": "antiddos-status-codes",
+      "label": "Anti DDoS status codes",
+      "regex": "^( *([1-5]\\d{2})(?!.*\\2) *)+$",
+      "type": "text"
+    },
+    "ANTIDDOS_DISTINCT_IP": {
+      "context": "global",
+      "default": "5",
+      "help": "Minimum distinct IP count before enabling anti DDoS measures.",
+      "id": "antiddos-distinct-ip",
+      "label": "Anti DDoS distinct IP",
+      "regex": "^\\d+$",
+      "type": "text"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "easy_resolve",
+  "name": "Easy Resolve",
+  "description": "Provides a simpler way to fix false positives in reports.",
+  "version": "0.27",
+  "stream": "no",
+  "settings": {}
+}

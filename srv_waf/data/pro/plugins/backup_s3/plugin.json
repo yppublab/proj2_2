@@ -1,0 +1,115 @@
+{
+  "id": "backup_s3",
+  "name": "Backup S3",
+  "description": "Automatically backup your data to an S3 bucket",
+  "version": "0.27",
+  "stream": "yes",
+  "settings": {
+    "USE_BACKUP_S3": {
+      "context": "global",
+      "default": "no",
+      "help": "Enable or disable the S3 backup feature",
+      "id": "use-backup-s3",
+      "label": "Activate automatic S3 backup",
+      "regex": "^(yes|no)$",
+      "type": "check"
+    },
+    "BACKUP_S3_SCHEDULE": {
+      "context": "global",
+      "default": "daily",
+      "help": "The frequency of the backup",
+      "id": "backup-s3-schedule",
+      "label": "Backup S3 schedule",
+      "regex": "^(daily|weekly|monthly)$",
+      "type": "select",
+      "select": [
+        "daily",
+        "weekly",
+        "monthly"
+      ]
+    },
+    "BACKUP_S3_ROTATION": {
+      "context": "global",
+      "default": "7",
+      "help": "The number of backups to keep",
+      "id": "backup-s3-rotation",
+      "label": "Backup S3 rotation",
+      "regex": "^[1-9][0-9]*$",
+      "type": "text"
+    },
+    "BACKUP_S3_ENDPOINT": {
+      "context": "global",
+      "default": "",
+      "help": "The S3 endpoint",
+      "id": "backup-s3-endpoint",
+      "label": "Backup S3 endpoint",
+      "regex": "^.*$",
+      "type": "text"
+    },
+    "BACKUP_S3_BUCKET": {
+      "context": "global",
+      "default": "",
+      "help": "The S3 bucket",
+      "id": "backup-s3-bucket",
+      "label": "Backup S3 bucket",
+      "regex": "^.*$",
+      "type": "text"
+    },
+    "BACKUP_S3_DIR": {
+      "context": "global",
+      "default": "",
+      "help": "The S3 directory",
+      "id": "backup-s3-dir",
+      "label": "Backup S3 directory",
+      "regex": "^.*$",
+      "type": "text"
+    },
+    "BACKUP_S3_REGION": {
+      "context": "global",
+      "default": "",
+      "help": "The S3 region",
+      "id": "backup-s3-region",
+      "label": "Backup S3 region",
+      "regex": "^.*$",
+      "type": "text"
+    },
+    "BACKUP_S3_ACCESS_KEY_ID": {
+      "context": "global",
+      "default": "",
+      "help": "The S3 access key ID",
+      "id": "backup-s3-access-key-id",
+      "label": "Backup S3 access key ID",
+      "regex": "^.*$",
+      "type": "password"
+    },
+    "BACKUP_S3_ACCESS_KEY_SECRET": {
+      "context": "global",
+      "default": "",
+      "help": "The S3 access key secret",
+      "id": "backup-s3-access-key-secret",
+      "label": "Backup S3 access key secret",
+      "regex": "^.*$",
+      "type": "password"
+    },
+    "BACKUP_S3_COMP_LEVEL": {
+      "context": "global",
+      "default": "6",
+      "help": "The compression level of the backup zip file",
+      "id": "backup-s3-comp-level",
+      "label": "Backup S3 compression level",
+      "regex": "^[1-9]$",
+      "type": "select",
+      "select": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ]
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "id": "monitoring",
+  "name": "Monitoring",
+  "description": "BunkerWeb monitoring pro system. This plugin is a prerequisite for some other plugins.",
+  "version": "0.27",
+  "stream": "no",
+  "settings": {
+    "USE_MONITORING": {
+      "context": "global",
+      "default": "yes",
+      "help": "Enable monitoring of BunkerWeb.",
+      "id": "use-monitoring",
+      "label": "Enable monitoring",
+      "regex": "^(no|yes)$",
+      "type": "check"
+    },
+    "MONITORING_METRICS_DICT_SIZE": {
+      "context": "global",
+      "default": "10M",
+      "help": "Size of the dict to store monitoring metrics.",
+      "id": "monitoring-metrics-dict-size",
+      "label": "Monitoring metrics dict size",
+      "regex": "^\\d+[kKmMgG]?$",
+      "type": "text"
+    },
+    "MONITORING_IGNORE_URLS": {
+      "context": "global",
+      "default": "",
+      "help": "List of URLs to ignore when monitoring separated with spaces (e.g. /health)",
+      "id": "monitoring-ignore-urls",
+      "label": "Monitoring ignore URLs",
+      "regex": "^.*$",
+      "type": "text"
+    }
+  }
+}
