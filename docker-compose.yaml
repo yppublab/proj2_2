@@ -72,25 +72,34 @@ services:
       - "53"
       - "53/udp"
 
+
   srv_waf:
+    image: bunkerity/bunkerweb-all-in-one:1.6.5
+    container_name: srv_waf
     hostname: srv-waf
-    build: srv_waf
     depends_on:
       - fw
       - srv_dns
-    container_name: srv_waf
-    cap_add: ["NET_ADMIN"]
-    restart: unless-stopped
+    cap_add: [ "NET_ADMIN" ]
+    user: root
+    restart: always    
+    environment:
+      - SERVICE_API="yes"
+      - API_WHITELIST_IPS="127.0.0.0/8 192.168.70.0/24"
+      - USE_REDIS="no"
+      - GATEWAY_IP=192.168.70.254
+      - ADM_HASH=${ADM_HASH}      
+      # Optionally set an admin override token
+      # API_TOKEN: "changeme"
+    volumes:
+      - ./srv_waf/data:/data
+      - ./srv_waf/start.sh:/start.sh:ro
+      - ./adm.sh:/usr/local/bin/adm.sh:rw        
+    dns: [ 192.168.50.70 ]
+    entrypoint: ["/bin/sh", "/start.sh"] 
     networks:
       dmz_net:
         ipv4_address: 192.168.70.5
-    volumes:
-      - ./adm.sh:/usr/local/bin/adm.sh:rw
-    environment:
-      - GATEWAY_IP=192.168.70.254
-      - ADM_HASH=${ADM_HASH}
-      - USER1_HASH=${USER1_HASH}
-    dns: [192.168.50.70]
 
   srv_web:
     hostname: srv-web
