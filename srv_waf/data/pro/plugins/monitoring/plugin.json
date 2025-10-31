@@ -2,7 +2,7 @@
   "id": "monitoring",
   "name": "Monitoring",
   "description": "BunkerWeb monitoring pro system. This plugin is a prerequisite for some other plugins.",
-  "version": "0.27",
+  "version": "0.28",
   "stream": "no",
   "settings": {
     "USE_MONITORING": {

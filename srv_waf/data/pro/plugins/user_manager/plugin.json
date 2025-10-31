@@ -2,7 +2,7 @@
   "id": "user_manager",
   "name": "User Manager",
   "description": "Add the possibility to manage users on the web interface",
-  "version": "0.27",
+  "version": "0.28",
   "stream": "no",
   "settings": {
     "USERS_REQUIRE_2FA": {

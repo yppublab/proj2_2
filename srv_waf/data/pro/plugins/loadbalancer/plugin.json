@@ -2,7 +2,7 @@
   "id": "loadbalancer",
   "name": "Load Balancer",
   "description": "Provides load balancing feature to group of upstreams with optional healthchecks.",
-  "version": "0.27",
+  "version": "0.28",
   "stream": "no",
   "settings": {
     "LOADBALANCER_HEALTHCHECK_DICT_SIZE": {

@@ -2,7 +2,7 @@
   "id": "backup_s3",
   "name": "Backup S3",
   "description": "Automatically backup your data to an S3 bucket",
-  "version": "0.27",
+  "version": "0.28",
   "stream": "yes",
   "settings": {
     "USE_BACKUP_S3": {
