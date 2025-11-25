@@ -65,7 +65,7 @@ services:
         ipv4_address: 192.168.50.70
     volumes:
       - ./srv_dns/Corefile:/etc/coredns/Corefile:ro
-      - ./srv_dns/investpro.local.db:/etc/coredns/investpro.local.db:ro
+      - ./srv_dns/investpro.local.db:/etc/coredns/investpro.local.db:rw
       - ./adm.sh:/usr/local/bin/adm.sh:rw
     environment:
       - GATEWAY_IP=192.168.50.254
