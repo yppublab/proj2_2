@@ -2,7 +2,7 @@
   "id": "migration",
   "name": "Migration",
   "description": "Migration of BunkerWeb configuration between instances made easy via the web UI",
-  "version": "0.28",
+  "version": "0.31",
   "stream": "yes",
   "settings": {}
 }

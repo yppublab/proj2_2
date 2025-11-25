@@ -5,8 +5,6 @@ set -eu
 ip route del default 2>/dev/null || true
 ip route add default via "${GATEWAY_IP}" || true
 
-useradd -m -s /bin/bash -p "${USER1_HASH}" user1 || true
-
 # Minimal nginx site
 rm -f /etc/nginx/http.d/default.conf 2>/dev/null || true
 

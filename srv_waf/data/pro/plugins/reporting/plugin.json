@@ -2,7 +2,7 @@
   "id": "reporting",
   "name": "Reporting",
   "description": "Regular reporting of important data from BunkerWeb (global, attacks, bans, requests, reasons, AS...). Monitoring pro plugin needed to work.",
-  "version": "0.28",
+  "version": "0.31",
   "stream": "no",
   "settings": {
     "USE_REPORTING_SMTP": {
