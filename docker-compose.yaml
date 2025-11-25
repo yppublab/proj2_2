@@ -14,7 +14,7 @@ services:
     extra_hosts: ["host.docker.internal:host-gateway"]
     ports:
       - "127.0.0.1:80:80" # srv_web
-      - "7000:7000" # srv_waf
+      - "7000:7000" # srv_waf 
       - "127.0.0.1:25:25" # srv_mail
       - "127.0.0.1:143:143" # srv_mail
       - "11334:11334" # srv_mail rspamd

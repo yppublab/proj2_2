@@ -2,7 +2,7 @@
   "id": "prometheus_exporter",
   "name": "Prometheus exporter",
   "description": "Prometheus exporter for BunkerWeb internal metrics.",
-  "version": "0.28",
+  "version": "0.31",
   "stream": "no",
   "settings": {
     "USE_PROMETHEUS_EXPORTER": {

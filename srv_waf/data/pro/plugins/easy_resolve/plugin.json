@@ -2,7 +2,7 @@
   "id": "easy_resolve",
   "name": "Easy Resolve",
   "description": "Provides a simpler way to fix false positives in reports.",
-  "version": "0.28",
+  "version": "0.31",
   "stream": "no",
   "settings": {}
 }
