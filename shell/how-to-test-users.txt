@@ -5,7 +5,7 @@
 
 2. Создайте архив с паролем из файлов agent.py и eicar.txt c помощью команды:
 
-7z a -tzip -p"infected" -mem=AES256 invoice.zip agent.py eicar.txt.
+7z a -tzip -p"infected" -mem=AES256 invoice.zip agent.py eicar.txt
 
 В примере команды ключом -p"infected" задаётся пароль infected.
 ----------------------------------------------------------------------------------

